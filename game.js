@@ -1,6 +1,11 @@
+let p1sc = 0
+let p2sc = 0
 
-
-function init() {
+function init(p1s, p2s) {
+    console.log("player1 Score :"+p1s)
+    console.log("player2 Score :"+p2s)
+    p1sc = p1s
+    p2sc = p2s
     let canvas = document.getElementById("frame")
     let context = canvas.getContext("2d")
     let p1x = canvas.width - 110
@@ -14,13 +19,12 @@ function init() {
     context.fillRect(p2x, 10, 100, 80)
     context.closePath()
     
-    startGame(context, p1x, p2x, canvas)
+    startGame(context, p1x, p2x, canvas, p1s, p2s)
     
 }
 
-function startGame(context,p1x,p2x,canvas) {
+function startGame(context,p1x,p2x,canvas, p1s, p2s) {
     window.addEventListener('keydown',e =>{
-        console.log(e.keyCode)
         switch (e.keyCode) {
             
             case 68:
@@ -76,6 +80,14 @@ function startGame(context,p1x,p2x,canvas) {
             case 87:
                 // player1 shoots
                 const x1 = shoot(context, p1x, canvas, "p1")
+                console.log(x1)
+                console.log(p2x)
+                if (x1 >= p2x - 40 && x1 <= p2x + 50) {
+                    p1s += 1
+                    context.clearRect(0,0, canvas.width, canvas.height)
+                    init(p1s, p2s)
+                    break;
+                }
                 setTimeout(()=>{
                     context.clearRect(x1 + 40, 0, 10, canvas.height - 110)
                 },500)
@@ -83,6 +95,12 @@ function startGame(context,p1x,p2x,canvas) {
             case 40:
                 // player2 shoots
                 const x2 = shoot(context, p2x, canvas, "p2")
+                if (x2 >= p1x - 40 && x2 <= p1x + 50) {
+                    p2s += 1
+                    context.clearRect(0,0, canvas.width, canvas.height)
+                    init(p1s, p2s)
+                    break;
+                }
                 setTimeout(()=>{
                     context.clearRect(x2 + 40, 90, 10, canvas.height)
                 },500)
@@ -100,6 +118,7 @@ function startGame(context,p1x,p2x,canvas) {
         }else{
             context.fillRect(xPos + 40, 90, 10, canvas.height)
         }
+        context.closePath()
         
         return xPos
     }
@@ -113,8 +132,13 @@ function showGuide() {
     guide.style = toggleGuide ? "display: inline" : "display: none"
 }
 
+function showScore() {
+    alert("player1 scored : "+ p1sc + "\nplayer2 scored : "+ p2sc)
+    
+}
 
 
 
 
-init()
+
+init(0,0)
