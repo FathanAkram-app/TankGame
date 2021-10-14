@@ -20,6 +20,7 @@ function init() {
 
 function startGame(context,p1x,p2x,canvas) {
     window.addEventListener('keydown',e =>{
+        console.log(e.keyCode)
         switch (e.keyCode) {
             
             case 68:
@@ -71,11 +72,48 @@ function startGame(context,p1x,p2x,canvas) {
                 context.fillRect(p2x, 10, 100, 80)
                 context.closePath()
                 break;
+
+            case 87:
+                // player1 shoots
+                const x1 = shoot(context, p1x, canvas, "p1")
+                setTimeout(()=>{
+                    context.clearRect(x1 + 40, 0, 10, canvas.height - 110)
+                },500)
+                break;
+            case 40:
+                // player2 shoots
+                const x2 = shoot(context, p2x, canvas, "p2")
+                setTimeout(()=>{
+                    context.clearRect(x2 + 40, 90, 10, canvas.height)
+                },500)
+                break;
             default:
                 break;
         }
     },false);
+
+    function shoot(context,xPos,canvas,p){
+        context.beginPath()
+        context.fillStyle = "yellow"
+        if (p == "p1") {
+            context.fillRect(xPos + 40, 0, 10, canvas.height - 110)
+        }else{
+            context.fillRect(xPos + 40, 90, 10, canvas.height)
+        }
+        
+        return xPos
+    }
 }
+
+let toggleGuide = true
+const guide = document.getElementById("guide")
+function showGuide() {
+    toggleGuide = !toggleGuide
+    console.log(toggleGuide)
+    guide.style = toggleGuide ? "display: inline" : "display: none"
+}
+
+
 
 
 
